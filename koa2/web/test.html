@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="/axios/dist/axios.js"></script>
+</head>
+
+<body>
+  <script>
+    axios.get('http://127.0.0.1:5000/api/gethero')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  </script>
+</body>
+
+</html>
