@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/art-template/lib/template-web.js"></script>
+    <script src="/node_modules/axios/dist/axios.js"></script>
+</head>
+
+<body>
+    <table class="table table-bordered" style="width:600px">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>时间</th>
+                <th>隐藏</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <script id='template' type="text/html">
+        <%for(var i=0;i<message.length;i++){%>
+        <tr>
+            <td>{{message[i].id}}</td>
+            <td>{{message[i].name}}</td>
+            <td>{{message[i].gender}}</td>
+            <td>{{message[i].ctime}}</td>
+            <td>
+                <a href="/info.html?id={{ message[i].id }}">查看</a>
+                <a href="/edit.html?id={{ message[i].id }}">编辑</a>
+                <a href="http://127.0.0.1:5000/api/delhero?id={{ message[i].id}}" class="del">删除</a>
+            </td>
+        </tr>
+        <%}%>
+    </script>
+    <script>
+        // $.ajax({
+        //     url: 'http://127.0.0.1:5000/api/gethero',
+        //     dataType: 'json',
+        //     success(res) {
+        //         console.log(res);
+        //         var html = template('template', res)
+        //         $('tbody').html(html);
+        //     }
+        // })
+        window.addEventListener('DOMContentLoaded', function () {
+            axios.get('http://127.0.0.1:5000/api/gethero')
+                .then(function (res) {
+                    console.log(res);
+                    // let {status, data, data{err_code}} = res;
+                    if (res.status === 200 && res.data.err_code === 0) {
+                        var html = template('template', res.data)
+                        $('tbody').html(html);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        })
+    </script>
+</body>
+
+</html>

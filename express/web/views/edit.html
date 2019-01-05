@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>修改</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/art-template/lib/template-web.js"></script>
+    <script src="/node_modules/axios/dist/axios.js"></script>
+</head>
+
+<body>
+
+    <form style="width:400px">
+        <div class="form-group">
+            <label for="name">姓名</label>
+            <input type="text" class="form-control" id="name" placeholder="请输入名字" name="name">
+        </div>
+        <div class="form-group">
+            <label for="gender">性别</label>
+            <input type="text" class="form-control" id="gender" placeholder="性别" name="gender">
+        </div>
+        <div class="form-group">
+            <label for="gender">是否显示</label>
+            <input type="text" class="form-control" id="isdel" placeholder="0" name="isdel">
+        </div>
+        <button type="button" class="btn btn-default">修改</button>
+    </form>
+    <script>
+        $(function () {
+            var i = new URLSearchParams(location.search)
+            axios.get(`http://127.0.0.1:5000/api/getheroId?id=${i.get('id')}`)
+                .then(function (res) {
+                    if (res.status === 200 && res.data.err_code === 0) {
+                        var arr = res.data.message[0];
+                        $('#name').val(arr.name);
+                        $('#gender').val(arr.gender);
+                        $('#isdel').val(arr.isdel);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            $('button').on('click', function () {
+                var str = $('form').serialize() + `&id=${i.get('id')}`;
+                axios.post('http://127.0.0.1:5000/api/updatehero', str)
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+        })
+    </script>
+</body>
+
+</html>
